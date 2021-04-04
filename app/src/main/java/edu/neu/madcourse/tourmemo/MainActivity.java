@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , MainActivity.class)
+                startActivity(new Intent(MainActivity.this , LoginActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null){
-            startActivity(new Intent(MainActivity.this , MainActivity.class));
+            startActivity(new Intent(MainActivity.this , HomeActivity.class));
             finish();
         }
     }
