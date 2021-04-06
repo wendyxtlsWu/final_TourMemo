@@ -9,12 +9,14 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import edu.neu.madcourse.tourmemo.R;
 import edu.neu.madcourse.tourmemo.model.ImageCard;
 
-public class BackgroundImageAdapter extends RecyclerView.Adapter<MainBackgroundAdapter.ViewHolder> {
+public class BackgroundImageAdapter extends RecyclerView.Adapter<BackgroundImageAdapter.ViewHolder> {
 
     Context mContext;
     List<ImageCard> mData;

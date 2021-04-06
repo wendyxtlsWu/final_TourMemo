@@ -1,6 +1,8 @@
 package edu.neu.madcourse.tourmemo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +12,36 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import edu.neu.madcourse.tourmemo.adapter.BackgroundImageAdapter;
+import edu.neu.madcourse.tourmemo.model.ImageCard;
+
 public class MainActivity extends AppCompatActivity {
 
-    private Button register;
-    private Button login;
+    private RecyclerView recyclerView;
+    private BackgroundImageAdapter adapter;
+    private LinearLayoutManager manager;
+    private List<ImageCard> appList;
+
+    final int time = 2000;
+
+    int[] covers = new int[]{
+            R.drawable.d1,
+            R.drawable.d3,
+            R.drawable.d4,
+            R.drawable.g1,
+            R.drawable.g2,
+            R.drawable.g3,
+            R.drawable.g4,
+            R.drawable.g5,
+            R.drawable.g6,
+            R.drawable.j1,
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +51,36 @@ public class MainActivity extends AppCompatActivity {
 
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
+        recyclerView = findViewById(R.id.recyclerView);
+
+        appList = new ArrayList<>();
+        adapter = new BackgroundImageAdapter(this, appList);
+        manager = new LinearLayoutManager(this);
+        recyclerView .setLayoutManager(manager);
+        recyclerView .setAdapter(adapter);
+
+
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                if (manager.findLastCompletelyVisibleItemPosition() < (adapter.getItemCount() - 1)) {
+                    manager.smoothScrollToPosition(recyclerView, new RecyclerView.State(), manager.findLastCompletelyVisibleItemPosition() + 1);
+                } else if (manager.findLastCompletelyVisibleItemPosition() == (adapter.getItemCount() - 1)) {
+                    manager.smoothScrollToPosition(recyclerView, new RecyclerView.State(), 0);
+                }
+            }
+        }, 0, time);
+
+        IntializeDataIntoRecyclerView();
 
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , RegisterActivity.class)
+                startActivity(new Intent(MainActivity.this , MainActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
@@ -36,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , LoginActivity.class)
+                startActivity(new Intent(MainActivity.this , MainActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
             }
         });
@@ -44,14 +96,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void IntializeDataIntoRecyclerView() {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if (FirebaseAuth.getInstance().getCurrentUser() != null){
-            startActivity(new Intent(MainActivity.this , HomeActivity.class));
-            finish();
+        for (int c : covers) {
+            ImageCard a = new ImageCard(c);
+            appList.add(a);
         }
+
+        adapter.notifyDataSetChanged();
+
     }
+
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//
+//        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+//            startActivity(new Intent(MainActivity.this , MainActivity.class));
+//            finish();
+//        }
+//    }
 }
