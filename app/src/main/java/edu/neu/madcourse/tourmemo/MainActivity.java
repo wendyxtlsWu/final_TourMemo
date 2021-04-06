@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayoutManager manager;
     private List<ImageCard> appList;
 
-    final int time = 2000;
+    final int time = 1000;
 
     int[] covers = new int[]{
             R.drawable.d1,
@@ -42,6 +42,23 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.g5,
             R.drawable.g6,
             R.drawable.j1,
+            R.drawable.l1,
+            R.drawable.l2,
+            R.drawable.l3,
+            R.drawable.l4,
+            R.drawable.m1,
+            R.drawable.m2,
+            R.drawable.m3,
+            R.drawable.m4,
+            R.drawable.o1,
+            R.drawable.o2,
+            R.drawable.o3,
+            R.drawable.o4,
+            R.drawable.s1,
+            R.drawable.l2,
+            R.drawable.l3,
+            R.drawable.l4,
+            
     };
 
 
