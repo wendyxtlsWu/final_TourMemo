@@ -22,6 +22,8 @@ import edu.neu.madcourse.tourmemo.model.ImageCard;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Button register;
+    private Button login;
     private RecyclerView recyclerView;
     private BackgroundImageAdapter adapter;
     private LinearLayoutManager manager;
