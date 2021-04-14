@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "354056624543",
+    "project_id": "tour-memo",
+    "storage_bucket": "tour-memo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:354056624543:android:e805abe6ef5213dc9085aa",
+        "android_client_info": {
+          "package_name": "edu.neu.madcourse.tourmemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "354056624543-q2ohv66nnuj1dhab21us32tqpch07trr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwpMimSWo1ePq5hcAsWY7-HRRBxULeAPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "354056624543-q2ohv66nnuj1dhab21us32tqpch07trr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
