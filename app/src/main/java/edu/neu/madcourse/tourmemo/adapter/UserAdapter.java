@@ -29,7 +29,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
     private Context mContext;
     private List<User> mUsers;
     private boolean isFragment;
-
     private FirebaseUser firebaseUser;
 
     public UserAdapter(Context mContext, List<User> mUsers, boolean isFragment) {
@@ -50,19 +49,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        final User user = mUsers.get(position);
-        holder.btnFollow.setVisibility(View.VISIBLE);
+        User user = mUsers.get(position);
 
         holder.username.setText(user.getUsername());
-        holder.fullname.setText(user.getName());
-
         Glide.with(mContext).load(user.getImageurl()).placeholder(R.mipmap.ic_launcher).into(holder.imageProfile);
-
-        isFollowed(user.getId() , holder.btnFollow);
+        holder.btnFollow.setVisibility(View.VISIBLE);
 
         if (user.getId().equals(firebaseUser.getUid())){
             holder.btnFollow.setVisibility(View.GONE);
         }
+
+        isFollowed(user.getId() , holder.btnFollow);
+
+
 
 
         holder.btnFollow.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +90,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
             public void onClick(View v) {
                 if (isFragment) {
                     mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE).edit().putString("profileId", user.getId()).apply();
-
                     ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 } else {
                     Intent intent = new Intent(mContext, MainActivity.class);
@@ -110,10 +108,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(id).exists())
+                if (dataSnapshot.child(id).exists()) {
                     btnFollow.setText("following");
-                else
+                } else {
                     btnFollow.setText("follow");
+                }
             }
 
             @Override
@@ -133,7 +132,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
         public CircleImageView imageProfile;
         public TextView username;
-        public TextView fullname;
         public Button btnFollow;
 
         public ViewHolder(@NonNull View itemView) {
@@ -141,7 +139,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
             imageProfile = itemView.findViewById(R.id.image_profile);
             username = itemView.findViewById(R.id.username);
-            fullname = itemView.findViewById(R.id.fullname);
             btnFollow = itemView.findViewById(R.id.btn_follow);
         }
     }

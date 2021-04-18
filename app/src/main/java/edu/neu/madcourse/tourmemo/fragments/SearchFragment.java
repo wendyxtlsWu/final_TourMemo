@@ -28,13 +28,13 @@ import edu.neu.madcourse.tourmemo.model.User;
 
 public class SearchFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewUser;
     private List<User> mUsers;
     private UserAdapter userAdapter;
 
-    private RecyclerView recyclerViewTags;
-    private List<String> mHashTags;
-    private List<String> mHashTagsCount;
+    private RecyclerView recyclerViewPosts;
+    private List<String> mPosts;
+    private List<String> mPostsCount;
     private UserPostAdapter uPostAdapter;
 
     private SocialAutoCompleteTextView search_bar;
@@ -44,27 +44,29 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        recyclerView = view.findViewById(R.id.recycler_view_users);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        recyclerViewTags = view.findViewById(R.id.recycler_view_tags);
-        recyclerViewTags.setHasFixedSize(true);
-        recyclerViewTags.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mHashTags = new ArrayList<>();
-        mHashTagsCount = new ArrayList<>();
-        uPostAdapter = new UserPostAdapter(getContext() , mHashTags , mHashTagsCount);
-        recyclerViewTags.setAdapter(uPostAdapter);
+        recyclerViewUser = view.findViewById(R.id.recycler_view_users);
+        recyclerViewUser.setHasFixedSize(true);
+        recyclerViewUser.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUsers = new ArrayList<>();
         userAdapter = new UserAdapter(getContext() , mUsers , true);
-        recyclerView.setAdapter(userAdapter);
+        recyclerViewUser.setAdapter(userAdapter);
+
+
+        recyclerViewPosts = view.findViewById(R.id.recycler_view_posts);
+        recyclerViewPosts.setHasFixedSize(true);
+        recyclerViewPosts.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mPosts = new ArrayList<>();
+        mPostsCount = new ArrayList<>();
+        uPostAdapter = new UserPostAdapter(getContext() , mPosts ,  mPostsCount);
+        recyclerViewPosts.setAdapter(uPostAdapter);
+
 
         search_bar = view.findViewById(R.id.search_bar);
 
         readUsers();
-        readTags();
+        readPosts();
 
         search_bar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -79,36 +81,13 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                filter(s.toString());
+                searchPost(s.toString());
             }
         });
 
         return view;
     }
 
-    private void readTags() {
-
-        FirebaseDatabase.getInstance().getReference().child("HashTags").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mHashTags.clear();
-                mHashTagsCount.clear();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    mHashTags.add(snapshot.getKey());
-                    mHashTagsCount.add(snapshot.getChildrenCount() + "");
-                }
-
-                uPostAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     private void readUsers() {
 
@@ -135,9 +114,9 @@ public class SearchFragment extends Fragment {
 
     }
 
-    private void searchUser (String s) {
+    private void searchUser (String usrName) {
         Query query = FirebaseDatabase.getInstance().getReference().child("Users")
-                .orderByChild("username").startAt(s).endAt(s + "\uf8ff");
+                .orderByChild("username").startAt(usrName).endAt(usrName + "\uf8ff");
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -157,17 +136,41 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void filter (String text) {
-        List<String> mSearchTags = new ArrayList<>();
-        List<String> mSearchTagsCount = new ArrayList<>();
+    private void readPosts() {
 
-        for (String s : mHashTags) {
+        FirebaseDatabase.getInstance().getReference().child("HashPosts").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mPosts.clear();
+                mPostsCount.clear();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    mPosts.add(snapshot.getKey());
+                    mPostsCount.add(snapshot.getChildrenCount() + "");
+                }
+
+                uPostAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void searchPost (String text) {
+        List<String> mSearchPosts = new ArrayList<>();
+        List<String> mSearchPostsCount = new ArrayList<>();
+
+        for (String s : mPosts) {
             if (s.toLowerCase().contains(text.toLowerCase())){
-                mSearchTags.add(s);
-                mSearchTagsCount.add(mHashTagsCount.get(mHashTags.indexOf(s)));
+                mSearchPosts.add(s);
+                mSearchPostsCount.add(mPostsCount.get(mPosts.indexOf(s)));
             }
         }
 
-        uPostAdapter.filter(mSearchTags , mSearchTagsCount);
+        uPostAdapter.filter(mSearchPosts , mSearchPostsCount);
     }
 }

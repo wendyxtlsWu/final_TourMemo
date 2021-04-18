@@ -16,52 +16,51 @@ import edu.neu.madcourse.tourmemo.R;
 public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHolder>{
 
     private Context mContext;
-    private List<String> mTags;
-    private List<String> mTagsCount;
+    private List<String> mPosts;
+    private List<String> mPostCount;
 
-    public UserPostAdapter(Context mContext, List<String> mTags, List<String> mTagsCount) {
+    public UserPostAdapter(Context mContext, List<String> mPosts, List<String> mPostCount) {
         this.mContext = mContext;
-        this.mTags = mTags;
-        this.mTagsCount = mTagsCount;
+        this.mPosts = mPosts;
+        this.mPostCount = mPostCount;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.u_post_item , parent , false);
-
         return new UserPostAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.tag.setText("# " + mTags.get(position));
-        holder.noOfPosts.setText(mTagsCount.get(position) + " posts");
+        holder.post.setText("# " + mPosts.get(position));
+        holder.numPosts.setText(mPostCount.get(position) + " posts");
 
     }
 
     @Override
     public int getItemCount() {
-        return mTags.size();
+        return mPosts.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView tag;
-        public TextView noOfPosts;
+        public TextView post;
+        public TextView numPosts;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tag = itemView.findViewById(R.id.hash_tag);
-            noOfPosts = itemView.findViewById(R.id.no_of_posts);
+            post = itemView.findViewById(R.id.user_post);
+            numPosts = itemView.findViewById(R.id.num_posts);
         }
     }
 
-    public void filter (List<String> filterTags , List<String> filterTagsCount) {
-        this.mTags = filterTags;
-        this.mTagsCount = filterTagsCount;
+    public void filter (List<String> filterPosts , List<String> filterPostsCount) {
+        this.mPosts = filterPosts;
+        this.mPostCount = filterPostsCount;
 
         notifyDataSetChanged();
     }

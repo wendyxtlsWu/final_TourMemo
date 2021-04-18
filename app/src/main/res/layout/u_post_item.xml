@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/hash_tag"
+        android:id="@+id/user_post"
         android:text="#tag"
         android:maxLines="1"
         android:textStyle="bold"
@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/no_of_posts"
+        android:id="@+id/num_posts"
         android:maxLines="1"
         android:text="X posts"/>
 
