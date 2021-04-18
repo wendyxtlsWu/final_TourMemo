@@ -14,12 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.neu.madcourse.tourmemo.R;
+import edu.neu.madcourse.tourmemo.adapter.UserAdapter;
+import edu.neu.madcourse.tourmemo.adapter.UserPostAdapter;
 import edu.neu.madcourse.tourmemo.model.User;
 
 
@@ -32,7 +40,7 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerViewTags;
     private List<String> mHashTags;
     private List<String> mHashTagsCount;
-    private TagAdapter tagAdapter;
+    private UserPostAdapter uPostAdapter;
 
     private SocialAutoCompleteTextView search_bar;
 
@@ -51,8 +59,8 @@ public class SearchFragment extends Fragment {
 
         mHashTags = new ArrayList<>();
         mHashTagsCount = new ArrayList<>();
-        tagAdapter = new TagAdapter(getContext() , mHashTags , mHashTagsCount);
-        recyclerViewTags.setAdapter(tagAdapter);
+        uPostAdapter = new UserPostAdapter(getContext() , mHashTags , mHashTagsCount);
+        recyclerViewTags.setAdapter(uPostAdapter);
 
         mUsers = new ArrayList<>();
         userAdapter = new UserAdapter(getContext() , mUsers , true);
@@ -96,7 +104,7 @@ public class SearchFragment extends Fragment {
                     mHashTagsCount.add(snapshot.getChildrenCount() + "");
                 }
 
-                tagAdapter.notifyDataSetChanged();
+                uPostAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -165,6 +173,6 @@ public class SearchFragment extends Fragment {
             }
         }
 
-        tagAdapter.filter(mSearchTags , mSearchTagsCount);
+        uPostAdapter.filter(mSearchTags , mSearchTagsCount);
     }
 }

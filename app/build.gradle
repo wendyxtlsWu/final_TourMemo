@@ -49,4 +49,5 @@ dependencies {
     implementation "com.hendraanggrian.appcompat:socialview:0.2"
     implementation "com.hendraanggrian.appcompat:socialview-commons:0.2"
 
+    implementation 'com.google.firebase:firebase-database:19.6.0'
 }
