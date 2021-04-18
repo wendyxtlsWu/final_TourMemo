@@ -31,25 +31,23 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.neu.madcourse.tourmemo.R;
+import edu.neu.madcourse.tourmemo.adapter.PhotoAdapter;
 import edu.neu.madcourse.tourmemo.model.User;
 
 
 public class CollectionsFragment extends Fragment {
+    private RecyclerView recyclerViewPosts;
+    private PhotoAdapter photoAdapterPosts;
+    private List<Post> myPhotoList;
 
     private RecyclerView recyclerViewSaves;
     private PhotoAdapter postAdapterSaves;
     private List<Post> mySavedPosts;
 
-    private RecyclerView recyclerView;
-    private PhotoAdapter photoAdapter;
-    private List<Post> myPhotoList;
-
     private CircleImageView imageProfile;
-
-    private ImageView myPictures;
-    private ImageView savedPictures;
-    private TextView fullname;
     private TextView username;
+    private ImageView myPosts;
+    private ImageView savedPictures;
 
     private FirebaseUser fUser;
 
@@ -62,6 +60,27 @@ public class CollectionsFragment extends Fragment {
 
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
+        recyclerViewPosts = view.findViewById(R.id.recycler_view_pictures);
+        recyclerViewPosts.setHasFixedSize(true);
+        recyclerViewPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        myPhotoList = new ArrayList<>();
+        photoAdapterPosts = new PhotoAdapter(getContext(), myPhotoList);
+        recyclerViewPosts.setAdapter(photoAdapterPosts);
+
+        recyclerViewSaves = view.findViewById(R.id.recycler_view_saved);
+        recyclerViewSaves.setHasFixedSize(true);
+        recyclerViewSaves.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mySavedPosts = new ArrayList<>();
+        postAdapterSaves = new PhotoAdapter(getContext(), mySavedPosts);
+        recyclerViewSaves.setAdapter(postAdapterSaves);
+
+
+        imageProfile = view.findViewById(R.id.image_profile);
+        username = view.findViewById(R.id.username);
+        myPosts = view.findViewById(R.id.my_pictures);
+        savedPictures = view.findViewById(R.id.saved_pictures);
+
+
         String data = getContext().getSharedPreferences("PROFILE", Context.MODE_PRIVATE).getString("profileId", "none");
 
         if (data.equals("none")) {
@@ -71,40 +90,19 @@ public class CollectionsFragment extends Fragment {
             getContext().getSharedPreferences("PROFILE", Context.MODE_PRIVATE).edit().clear().apply();
         }
 
-        imageProfile = view.findViewById(R.id.image_profile);
 
-
-        fullname = view.findViewById(R.id.fullname);
-        username = view.findViewById(R.id.username);
-        myPictures = view.findViewById(R.id.my_pictures);
-        savedPictures = view.findViewById(R.id.saved_pictures);
-
-        recyclerView = view.findViewById(R.id.recucler_view_pictures);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        myPhotoList = new ArrayList<>();
-        photoAdapter = new PhotoAdapter(getContext(), myPhotoList);
-        recyclerView.setAdapter(photoAdapter);
-
-        recyclerViewSaves = view.findViewById(R.id.recucler_view_saved);
-        recyclerViewSaves.setHasFixedSize(true);
-        recyclerViewSaves.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mySavedPosts = new ArrayList<>();
-        postAdapterSaves = new PhotoAdapter(getContext(), mySavedPosts);
-        recyclerViewSaves.setAdapter(postAdapterSaves);
-
-        userInfo();
-        myPhotos();
+        setUserInfo();
+        getMyPosts();
         getSavedPosts();
 
 
-        recyclerView.setVisibility(View.VISIBLE);
+        recyclerViewPosts.setVisibility(View.VISIBLE);
         recyclerViewSaves.setVisibility(View.GONE);
 
-        myPictures.setOnClickListener(new View.OnClickListener() {
+        myPosts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setVisibility(View.VISIBLE);
+                recyclerViewPosts.setVisibility(View.VISIBLE);
                 recyclerViewSaves.setVisibility(View.GONE);
             }
         });
@@ -112,7 +110,7 @@ public class CollectionsFragment extends Fragment {
         savedPictures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setVisibility(View.GONE);
+                recyclerViewPosts.setVisibility(View.GONE);
                 recyclerViewSaves.setVisibility(View.VISIBLE);
             }
         });
@@ -120,6 +118,52 @@ public class CollectionsFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void setUserInfo() {
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(profileId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                Glide.with(getContext()).load(user.getImageurl()).into(imageProfile);
+                username.setText(user.getUsername());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void getMyPosts() {
+
+        FirebaseDatabase.getInstance().getReference().child("Posts").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                myPhotoList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Post post = snapshot.getValue(Post.class);
+
+                    if (post.getPublisher().equals(profileId)) {
+                        myPhotoList.add(post);
+                    }
+                }
+
+                Collections.reverse(myPhotoList);
+                photoAdapterPosts.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void getSavedPosts() {
@@ -167,51 +211,4 @@ public class CollectionsFragment extends Fragment {
 
     }
 
-    private void myPhotos() {
-
-        FirebaseDatabase.getInstance().getReference().child("Posts").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                myPhotoList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Post post = snapshot.getValue(Post.class);
-
-                    if (post.getPublisher().equals(profileId)) {
-                        myPhotoList.add(post);
-                    }
-                }
-
-                Collections.reverse(myPhotoList);
-                photoAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-
-    private void userInfo() {
-
-        FirebaseDatabase.getInstance().getReference().child("Users").child(profileId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-
-                Glide.with(getActivity()).load(user.getImageurl()).into(imageProfile);
-                username.setText(user.getUsername());
-                fullname.setText(user.getName());
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 }
