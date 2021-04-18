@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,9 +61,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
             holder.btnFollow.setVisibility(View.GONE);
         }
 
-        isFollowed(user.getId() , holder.btnFollow);
-
-
+        followUser(user.getId() , holder.btnFollow);
 
 
         holder.btnFollow.setOnClickListener(new View.OnClickListener() {
@@ -75,12 +75,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
                             child(user.getId()).child("followers").child(firebaseUser.getUid()).setValue(true);
 
                     addNotification(user.getId());
+                    Toast.makeText(mContext, "you are following this user", Toast.LENGTH_LONG).show();
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("Follow").
                             child((firebaseUser.getUid())).child("following").child(user.getId()).removeValue();
 
                     FirebaseDatabase.getInstance().getReference().child("Follow").
                             child(user.getId()).child("followers").child(firebaseUser.getUid()).removeValue();
+                    Toast.makeText(mContext, "you are not following this user", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -101,7 +103,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
 
     }
 
-    private void isFollowed(final String id, final Button btnFollow) {
+    private void followUser(final String id, final Button btnFollow) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.getUid())
                 .child("following");
