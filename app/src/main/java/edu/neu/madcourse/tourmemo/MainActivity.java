@@ -20,10 +20,8 @@ import java.util.TimerTask;
 import edu.neu.madcourse.tourmemo.adapter.BackgroundImageAdapter;
 import edu.neu.madcourse.tourmemo.model.ImageCard;
 
-public class           MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
-    private Button register;
-    private Button login;
     private RecyclerView recyclerView;
     private BackgroundImageAdapter adapter;
     private LinearLayoutManager manager;
@@ -58,7 +56,7 @@ public class           MainActivity extends AppCompatActivity {
             R.drawable.l2,
             R.drawable.l3,
             R.drawable.l4,
-            
+
     };
 
 
@@ -67,9 +65,6 @@ public class           MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        register = findViewById(R.id.register);
-        login = findViewById(R.id.login);
         recyclerView = findViewById(R.id.recyclerView);
 
         appList = new ArrayList<>();
@@ -96,21 +91,7 @@ public class           MainActivity extends AppCompatActivity {
         IntializeDataIntoRecyclerView();
 
 
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
-        });
 
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , MainActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-            }
-        });
 
     }
 
@@ -127,13 +108,13 @@ public class           MainActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//
-//        if (FirebaseAuth.getInstance().getCurrentUser() != null){
-//            startActivity(new Intent(MainActivity.this , MainActivity.class));
-//            finish();
-//        }
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+            startActivity(new Intent(MainActivity.this , MainActivity.class));
+            finish();
+        }
+    }
 }

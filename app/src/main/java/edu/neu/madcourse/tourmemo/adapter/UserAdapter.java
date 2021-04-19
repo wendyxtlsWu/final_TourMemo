@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
+import edu.neu.madcourse.tourmemo.MainActivity;
 import edu.neu.madcourse.tourmemo.R;
 import edu.neu.madcourse.tourmemo.model.User;
 
@@ -87,19 +88,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
             }
         });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFragment) {
-                    mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE).edit().putString("profileId", user.getId()).apply();
-                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-                } else {
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    intent.putExtra("publisherId", user.getId());
-                    mContext.startActivity(intent);
-                }
-            }
-        });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (isFragment) {
+//                    mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE).edit().putString("profileId", user.getId()).apply();
+//                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+//                } else {
+//                    Intent intent = new Intent(mContext, MainActivity.class);
+//                    intent.putExtra("publisherId", user.getId());
+//                    mContext.startActivity(intent);
+//                }
+//            }
+//        });
 
     }
 
