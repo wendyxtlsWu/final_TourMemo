@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "773886076964",
-    "project_id": "tour-memo-746ca",
-    "storage_bucket": "tour-memo-746ca.appspot.com"
+    "project_number": "152180290084",
+    "project_id": "tourmemo-c6496",
+    "storage_bucket": "tourmemo-c6496.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:773886076964:android:6fbc131cedf1317509d0b1",
+        "mobilesdk_app_id": "1:152180290084:android:9cf7f018deae7578a45eb1",
         "android_client_info": {
           "package_name": "edu.neu.madcourse.tourmemo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "773886076964-oaq6utemhpego1dt96lvdb0lrc6unddi.apps.googleusercontent.com",
+          "client_id": "152180290084-3buarb20cch5td341m78nn2pp0jq6a27.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAs3aKc55Ut531R6ah5wZKQgzlpssrih4k"
+          "current_key": "AIzaSyDFQxuqDcKf239t9YDYBnwqzn8HqQxm1IE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "773886076964-oaq6utemhpego1dt96lvdb0lrc6unddi.apps.googleusercontent.com",
+              "client_id": "152180290084-3buarb20cch5td341m78nn2pp0jq6a27.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -16,7 +16,7 @@ import java.util.List;
 import edu.neu.madcourse.tourmemo.R;
 import edu.neu.madcourse.tourmemo.model.ImageCard;
 
-public class BackgroundImageAdapter extends RecyclerView.Adapter<BackgroundImageAdapter.ViewHolder> {
+public class  BackgroundImageAdapter extends RecyclerView.Adapter<BackgroundImageAdapter.ViewHolder> {
 
     Context mContext;
     List<ImageCard> mData;

@@ -20,7 +20,7 @@ import java.util.TimerTask;
 import edu.neu.madcourse.tourmemo.adapter.BackgroundImageAdapter;
 import edu.neu.madcourse.tourmemo.model.ImageCard;
 
-public class MainActivity extends AppCompatActivity {
+public class           MainActivity extends AppCompatActivity {
 
     private Button register;
     private Button login;
