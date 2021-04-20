@@ -13,3 +13,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+.firebaserc
+firebase.json
+package-lock.json
+/node_modules
+/functions
