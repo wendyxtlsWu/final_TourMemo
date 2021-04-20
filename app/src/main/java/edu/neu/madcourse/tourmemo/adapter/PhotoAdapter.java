@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import edu.neu.madcourse.tourmemo.R;
+import edu.neu.madcourse.tourmemo.model.Post;
+
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
 
@@ -37,7 +39,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         final Post post = mPosts.get(position);
-        Glide.with(mContext).load(post.getImageurl()).placeholder(R.mipmap.ic_launcher).into(holder.postImage);
+        Glide.with(mContext).load(post.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.postImage);
 
 //        holder.postImage.setOnClickListener(new View.OnClickListener() {
 //            @Override

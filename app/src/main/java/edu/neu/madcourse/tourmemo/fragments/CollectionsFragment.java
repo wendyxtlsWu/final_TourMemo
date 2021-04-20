@@ -33,6 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import edu.neu.madcourse.tourmemo.R;
 import edu.neu.madcourse.tourmemo.adapter.PhotoAdapter;
 import edu.neu.madcourse.tourmemo.model.User;
+import edu.neu.madcourse.tourmemo.model.Post;
 
 
 public class CollectionsFragment extends Fragment {
@@ -186,7 +187,7 @@ public class CollectionsFragment extends Fragment {
                             Post post = snapshot1.getValue(Post.class);
 
                             for (String id : savedIds) {
-                                if (post.getPostid().equals(id)) {
+                                if (post.getPostId().equals(id)) {
                                     mySavedPosts.add(post);
                                 }
                             }

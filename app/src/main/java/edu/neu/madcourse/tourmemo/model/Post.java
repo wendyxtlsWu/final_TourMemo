@@ -1,7 +1,7 @@
 package edu.neu.madcourse.tourmemo.model;
 
 public class Post {
-    
+
     private String zipcode;
     private String description;
     private String postId;
