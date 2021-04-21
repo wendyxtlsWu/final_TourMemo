@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference mRootRef;
     private FirebaseAuth mAuth;
 
-    ProgressDialog pd;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +50,12 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
         register = findViewById(R.id.register);
         loginUser = findViewById(R.id.login_user);
+        progressBar = findViewById(R.id.progressBar);
 
         mRootRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        pd = new ProgressDialog(this);
+
+        progressBar.setVisibility(View.INVISIBLE);
 
         loginUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,10 +74,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(txtUsername) || TextUtils.isEmpty(txtName)
                         || TextUtils.isEmpty(txtEmail) || TextUtils.isEmpty(txtPassword)){
-                    Toast.makeText(RegisterActivity.this, "Empty credentials!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Please input valid information", Toast.LENGTH_SHORT).show();
                 } else if (txtPassword.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Password too short!", Toast.LENGTH_SHORT).show();
                 } else {
+                    progressBar.setVisibility(View.INVISIBLE);
                     registerUser(txtUsername , txtName , txtEmail , txtPassword);
                 }
             }
@@ -83,26 +87,23 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void registerUser(final String username, final String name, final String email, String password) {
 
-        pd.setMessage("Please Wail!");
-        pd.show();
-
         mAuth.createUserWithEmailAndPassword(email , password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
 
-                HashMap<String , Object> map = new HashMap<>();
-                map.put("name" , name);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("name", name);
                 map.put("email", email);
                 map.put("username" , username);
-                map.put("id" , mAuth.getCurrentUser().getUid());
-                map.put("bio" , "");
-                map.put("imageurl" , "default");
+                map.put("id", mAuth.getCurrentUser().getUid());
+                map.put("bio", "");
+                map.put("imageurl", "default");
 
                 mRootRef.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
-                            pd.dismiss();
+                            progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(RegisterActivity.this, "Update the profile " +
                                     "for better expereince", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(RegisterActivity.this , MainActivity.class);
@@ -117,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                pd.dismiss();
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
