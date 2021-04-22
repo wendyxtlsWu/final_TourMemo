@@ -8,8 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -65,7 +64,6 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
         recyclerView = findViewById(R.id.recyclerView);
@@ -73,8 +71,8 @@ public class StartActivity extends AppCompatActivity {
         appList = new ArrayList<>();
         adapter = new BackgroundImageAdapter(this, appList);
         manager = new LinearLayoutManager(this);
-        recyclerView .setLayoutManager(manager);
-        recyclerView .setAdapter(adapter);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
 
 
         final Timer timer = new Timer();

@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
         });
 
+        // log in button
         button_login.setOnClickListener(v -> {
             progressBar.setVisibility(View.VISIBLE);
 

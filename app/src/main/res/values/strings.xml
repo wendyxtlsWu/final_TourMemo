@@ -3,5 +3,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="log_in">Login</string>
+    <string name="log_out">Log Out</string>
     <string name="register">Register</string>
+    <string name="email">Email:</string>
+    <string name="password">Password:</string>
+    <string name="new_user">New user? Click here to register</string>
+    <string name="settings">Settings</string>
+    <string name="saved">Saved</string>
+    <string name="logout">Log out</string>
 </resources>
