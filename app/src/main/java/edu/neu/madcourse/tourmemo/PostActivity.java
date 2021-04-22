@@ -158,10 +158,10 @@ public class PostActivity extends AppCompatActivity {
                     String postId = ref.push().getKey();
 
                     HashMap<String , Object> map = new HashMap<>();
-                    map.put("postid" , postId);
+                    map.put("postId" , postId);
                     map.put("spotName", spotName.getText().toString());
                     map.put("zipcode", zipcode.getText().toString());
-                    map.put("imageurl" , imageUrl);
+                    map.put("imageUrl" , imageUrl);
                     map.put("description" , description.getText().toString());
                     map.put("publisher" , FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -169,6 +169,8 @@ public class PostActivity extends AppCompatActivity {
 
                     DatabaseReference mHashTagRef = FirebaseDatabase.getInstance().getReference().child("HashTags");
                     List<String> hashTags = description.getHashtags();
+                    hashTags.add(spotName.getText().toString());
+                    hashTags.add(zipcode.getText().toString());
                     if (!hashTags.isEmpty()){
                         for (String tag : hashTags){
                             map.clear();

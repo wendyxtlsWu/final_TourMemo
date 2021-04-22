@@ -138,7 +138,7 @@ public class SearchFragment extends Fragment {
 
     private void readPosts() {
 
-        FirebaseDatabase.getInstance().getReference().child("HashPosts").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("HashTags").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mPosts.clear();
