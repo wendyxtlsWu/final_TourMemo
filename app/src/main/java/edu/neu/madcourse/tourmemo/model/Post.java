@@ -3,7 +3,7 @@ package edu.neu.madcourse.tourmemo.model;
 public class Post {
 
     private String zipcode;
-    private String spotMame;
+    private String spotName;
     private String description;
     private String postId;
     private String publisher;
@@ -13,8 +13,8 @@ public class Post {
     }
     
     public Post(String zipcode, String description, String postId, String publisher,
-                String imageUrl, String spotMame) {
-        this.spotMame = spotMame;
+                String imageUrl, String spotName) {
+        this.spotName = spotName;
         this.zipcode = zipcode;
         this.description = description;
         this.postId = postId;
@@ -22,12 +22,12 @@ public class Post {
         this.imageUrl = imageUrl;
     }
 
-    public String getSpotMame() {
-        return spotMame;
+    public String getSpotName() {
+        return spotName;
     }
 
-    public void setSpotMame(String spotMame) {
-        this.spotMame = spotMame;
+    public void setSpotName(String spotName) {
+        this.spotName = spotName;
     }
 
     public String getZipcode() {
