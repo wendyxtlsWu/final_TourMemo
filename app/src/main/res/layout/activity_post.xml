@@ -58,7 +58,7 @@
 
 
             <EditText
-                android:id="@+id/editTextTextPersonName3"
+                android:id="@+id/zipcode"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
@@ -91,7 +91,9 @@
             android:layout_marginTop="15dp"
             android:hint="Description..."
             android:maxLines="10"
-            android:id="@+id/description" />
+            android:id="@+id/description"
+            app:socialFlags="hashtag|mention"
+            app:hashtagColor="@color/colorPrimary"/>
 
         <LinearLayout
             android:layout_width="match_parent"
