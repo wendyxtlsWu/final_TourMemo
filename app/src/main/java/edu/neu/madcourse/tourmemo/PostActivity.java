@@ -17,6 +17,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -31,6 +32,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +52,7 @@ import java.util.List;
 import java.util.Locale;
 
 import edu.neu.madcourse.tourmemo.model.Post;
+import edu.neu.madcourse.tourmemo.model.User;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -65,6 +68,11 @@ public class PostActivity extends AppCompatActivity {
     SocialAutoCompleteTextView description;
 
     private Geocoder geocoder;
+    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+    private String POST_TAG = "PostActivity";
+
+    static Long points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,21 @@ public class PostActivity extends AppCompatActivity {
         btnGetCurrZipcode = findViewById(R.id.current_zipcode);
         spotName = findViewById(R.id.spot_name);
         zipcode = findViewById(R.id.zipcode);
+
+//        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                User user = dataSnapshot.getValue(User.class);
+//                points = user.getPoints();
+//                spotName.setText(String.valueOf(points));
+//                Log.v(POST_TAG, "current points: " + points);
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -182,8 +205,33 @@ public class PostActivity extends AppCompatActivity {
                         }
                     }
 
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            points = user.getPoints();
+//                            Log.v(POST_TAG, "current points: " + points);
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                    if (points == null) {
+                        points = 0L;
+                    }
+                    HashMap<String, Object> userMap = new HashMap<>();
+                    points = points + 5L;
+                    userMap.put("points", points);
+//                    Log.v(POST_TAG, "new points: " + points);
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).updateChildren(userMap);
+
                     pd.dismiss();
                     startActivity(new Intent(PostActivity.this , MainActivity.class));
+                    Toast.makeText(PostActivity.this, "You earned 5 points!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }).addOnFailureListener(new OnFailureListener() {
