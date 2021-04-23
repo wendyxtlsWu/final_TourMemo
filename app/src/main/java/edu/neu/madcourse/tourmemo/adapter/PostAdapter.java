@@ -105,12 +105,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
             public void onClick(View v) {
                 if (holder.like.getTag().equals("like")) {
                     FirebaseDatabase.getInstance().getReference().child("Likes")
-                            .child(post.getPostId()).child(firebaseUser.getUid()).setValue(true);
+                            .child(firebaseUser.getUid()).child(post.getPostId()).setValue(true);
 
                     addNotification(post.getPostId(), post.getPublisher());
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("Likes")
-                            .child(post.getPostId()).child(firebaseUser.getUid()).removeValue();
+                            .child(firebaseUser.getUid()).child(post.getPostId()).removeValue();
                 }
             }
         });
@@ -185,10 +185,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
     }
 
     private void isLiked(String postId, final ImageView imageView) {
-        FirebaseDatabase.getInstance().getReference().child("Likes").child(postId).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Likes").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(firebaseUser.getUid()).exists()) {
+                if (dataSnapshot.child(postId).exists()) {
                     imageView.setImageResource(R.drawable.ic_liked);
                     imageView.setTag("liked");
                 } else {

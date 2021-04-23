@@ -22,11 +22,21 @@
         android:padding="8dp">
 
         <TextView
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:text="user name"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/txtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="1dp"
             android:text="spot name"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -34,16 +44,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="1dp"
-            android:text="zipcode" />
+            android:text="zipcode"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtDes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="1dp"
-            android:text="description" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/like"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="34dp"

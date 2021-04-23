@@ -1,16 +1,14 @@
 package edu.neu.madcourse.tourmemo.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,18 +22,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-import edu.neu.madcourse.tourmemo.MainActivity;
 import edu.neu.madcourse.tourmemo.R;
+import edu.neu.madcourse.tourmemo.fragments.PostDetailFragment;
 import edu.neu.madcourse.tourmemo.model.Post;
+import edu.neu.madcourse.tourmemo.model.User;
 
 public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHolder>{
 
     private Context mContext;
-//    private List<String> mPosts;
-//    private List<String> mPostCount;
     private List<Post> mUserPost;
     private FirebaseUser firebaseUser;
+    String usrName = "";
 
     public UserPostAdapter(Context mContext, List<Post> mUserPost) {
         this.mContext = mContext;
@@ -55,9 +52,30 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Post userPost = mUserPost.get(position);
 
-        holder.zipcode.setText(userPost.getZipcode());
-        holder.name.setText(userPost.getSpotName());
-        holder.description.setText(userPost.getDescription());
+        String userID = userPost.getPublisher();
+
+
+        FirebaseDatabase.getInstance().getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                    User cUser = snapshot1.getValue(User.class);
+
+                    if(cUser.getId().equals(userID)) {
+                        usrName = cUser.getUsername();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        holder.username.setText("user name: "+ usrName);
+        holder.zipcode.setText("zip code: "+ userPost.getZipcode());
+        holder.name.setText("spot name: "+ userPost.getSpotName());
         Glide.with(mContext).load(userPost.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.image);
 
         isLiked(userPost.getPostId(), holder.likeButton);
@@ -67,33 +85,34 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
             public void onClick(View v) {
                 if (holder.likeButton.getTag().equals("like")) {
                     FirebaseDatabase.getInstance().getReference().child("Likes")
-                            .child(userPost.getPostId()).child(firebaseUser.getUid()).setValue(true);
+                            .child(firebaseUser.getUid()).child(userPost.getPostId()).setValue(true);
 
                     addNotification(userPost.getPostId(), userPost.getPublisher());
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("Likes")
-                            .child(userPost.getPostId()).child(firebaseUser.getUid()).removeValue();
+                            .child(firebaseUser.getUid()).child(userPost.getPostId()).removeValue();
                 }
             }
         });
 
-//       holder.itemView.setOnClickListener(new View.OnClickListener() {
-//           @Override
-//           public void onClick(View v) {
-//               Intent intent = new Intent(mContext, MainActivity.class);
-//               mContext.startActivity(intent);
-//           }
-//       });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit().putString("postId", userPost.getPostId()).apply();
 
+                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new PostDetailFragment()).commit();
+            }
+        });
 
     }
 
     private void isLiked(String postId, final ImageView imageView) {
-        FirebaseDatabase.getInstance().getReference().child("Likes").child(postId).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Likes").child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(firebaseUser.getUid()).exists()) {
+                if (dataSnapshot.child(postId).exists()) {
                     imageView.setImageResource(R.drawable.ic_liked);
                     imageView.setTag("liked");
                 } else {
@@ -110,7 +129,6 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
     }
 
 
-
     @Override
     public int getItemCount() {
         return mUserPost.size();
@@ -119,17 +137,18 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView zipcode;
+        public TextView username;
         public TextView name;
-        public TextView description;
+
         public ImageView image;
-        public ImageButton likeButton;
+        public ImageView likeButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             zipcode = itemView.findViewById(R.id.txtZipcode);
+            username = itemView.findViewById(R.id.userName);
             name = itemView.findViewById(R.id.txtName);
-            description = itemView.findViewById(R.id.txtDes);
             image = itemView.findViewById(R.id.img);
             likeButton = itemView.findViewById(R.id.like);
         }

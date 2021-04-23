@@ -41,15 +41,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         final Post post = mPosts.get(position);
         Glide.with(mContext).load(post.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.postImage);
 
-//        holder.postImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit().putString("postid", post.getPostid()).apply();
-//
-//                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.fragment_container, new PostDetailFragment()).commit();
-//            }
-//        });
 
     }
 
