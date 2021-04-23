@@ -41,14 +41,12 @@ public class CollectionsFragment extends Fragment {
     private PhotoAdapter photoAdapterPosts;
     private List<Post> myPhotoList;
 
-    private RecyclerView recyclerViewSaves;
-    private PhotoAdapter postAdapterSaves;
-    private List<Post> mySavedPosts;
+    private RecyclerView recyclerViewLikes;
+    private PhotoAdapter postAdapterLikes;
+    private List<Post> myLikePosts;
 
-    private CircleImageView imageProfile;
-    private TextView username;
     private ImageView myPosts;
-    private ImageView savedPictures;
+    private ImageView likedPictures;
 
     private FirebaseUser fUser;
 
@@ -68,18 +66,16 @@ public class CollectionsFragment extends Fragment {
         photoAdapterPosts = new PhotoAdapter(getContext(), myPhotoList);
         recyclerViewPosts.setAdapter(photoAdapterPosts);
 
-        recyclerViewSaves = view.findViewById(R.id.recycler_view_saved);
-        recyclerViewSaves.setHasFixedSize(true);
-        recyclerViewSaves.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        mySavedPosts = new ArrayList<>();
-        postAdapterSaves = new PhotoAdapter(getContext(), mySavedPosts);
-        recyclerViewSaves.setAdapter(postAdapterSaves);
+        recyclerViewLikes = view.findViewById(R.id.recycler_view_liked);
+        recyclerViewLikes.setHasFixedSize(true);
+        recyclerViewLikes.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        myLikePosts = new ArrayList<>();
+        postAdapterLikes = new PhotoAdapter(getContext(), myLikePosts);
+        recyclerViewLikes.setAdapter(postAdapterLikes);
 
 
-        imageProfile = view.findViewById(R.id.image_profile);
-        username = view.findViewById(R.id.username);
         myPosts = view.findViewById(R.id.my_pictures);
-        savedPictures = view.findViewById(R.id.saved_pictures);
+        likedPictures = view.findViewById(R.id.saved_pictures);
 
 
         String data = getContext().getSharedPreferences("PROFILE", Context.MODE_PRIVATE).getString("profileId", "none");
@@ -92,54 +88,33 @@ public class CollectionsFragment extends Fragment {
         }
 
 
-        setUserInfo();
         getMyPosts();
-        getSavedPosts();
+        getLikedPosts();
 
 
         recyclerViewPosts.setVisibility(View.VISIBLE);
-        recyclerViewSaves.setVisibility(View.GONE);
+        recyclerViewLikes.setVisibility(View.GONE);
 
         myPosts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recyclerViewPosts.setVisibility(View.VISIBLE);
-                recyclerViewSaves.setVisibility(View.GONE);
+                recyclerViewLikes.setVisibility(View.GONE);
             }
         });
 
-        savedPictures.setOnClickListener(new View.OnClickListener() {
+        likedPictures.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 recyclerViewPosts.setVisibility(View.GONE);
-                recyclerViewSaves.setVisibility(View.VISIBLE);
+                recyclerViewLikes.setVisibility(View.VISIBLE);
             }
         });
-
 
 
         return view;
     }
 
-    private void setUserInfo() {
-
-        FirebaseDatabase.getInstance().getReference().child("Users").child(profileId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-
-                Glide.with(getContext()).load(user.getImageurl()).into(imageProfile);
-                username.setText(user.getUsername());
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     private void getMyPosts() {
 
@@ -167,11 +142,11 @@ public class CollectionsFragment extends Fragment {
 
     }
 
-    private void getSavedPosts() {
+    private void getLikedPosts() {
 
         final List<String> savedIds = new ArrayList<>();
 
-        FirebaseDatabase.getInstance().getReference().child("Saves").child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Likes").child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -181,19 +156,19 @@ public class CollectionsFragment extends Fragment {
                 FirebaseDatabase.getInstance().getReference().child("Posts").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
-                        mySavedPosts.clear();
+                        myLikePosts.clear();
 
                         for (DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
                             Post post = snapshot1.getValue(Post.class);
 
                             for (String id : savedIds) {
                                 if (post.getPostId().equals(id)) {
-                                    mySavedPosts.add(post);
+                                    myLikePosts.add(post);
                                 }
                             }
                         }
 
-                        postAdapterSaves.notifyDataSetChanged();
+                        postAdapterLikes.notifyDataSetChanged();
                     }
 
                     @Override
