@@ -5,9 +5,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -17,7 +21,9 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -74,6 +80,8 @@ public class PostActivity extends AppCompatActivity {
 
     private Long points;
 
+    private LocationManager locationManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,35 +131,70 @@ public class PostActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.P)
             @Override
             public void onClick(View v) {
-                LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(PostActivity.this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(PostActivity.this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(
-                            PostActivity.this,
-                            new String[] {Manifest.permission.ACCESS_FINE_LOCATION,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
+                ActivityCompat.requestPermissions(PostActivity.this,
+                        new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                    Log.v(TAG,"GPS is closed");
+                    onGPS();
+                } else {
+                    getZipCode();
                 }
-                Location location = locationManager
-                        .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                geocoder= new Geocoder(PostActivity.this, Locale.ENGLISH);
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 10);
-                    for (Address address : addresses) {
-                        if(address.getLocality()!=null && address.getPostalCode()!=null){
-                            zipcode.setText(address.getPostalCode());
-                            break;
-                        }
-                    }
-                } catch (IOException e) {
-                    Toast.makeText(PostActivity.this, "Unable to find current location.", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
 
         CropImage.activity().start(PostActivity.this);
 
+    }
+
+    private void getZipCode() {
+        if (ContextCompat.checkSelfPermission(PostActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    PostActivity.this,
+                    new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            Location location = locationManager
+                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location == null) {
+                Toast.makeText(PostActivity.this, "Unable to find location.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            geocoder= new Geocoder(PostActivity.this, Locale.ENGLISH);
+            try {
+                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 10);
+                for (Address address : addresses) {
+                    if(address.getLocality()!=null && address.getPostalCode()!=null){
+                        zipcode.setText(address.getPostalCode());
+                        break;
+                    }
+                }
+            } catch (IOException e) {
+                Toast.makeText(PostActivity.this, "Unable to find current location.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void onGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, R.style.AlertDialogCustom));
+        builder.setMessage("Enable to access your location").setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        Log.v(TAG,"GPS granted");
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                        Log.v(TAG,"GPS denied");
+                dialog.cancel();
+            }
+        });
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 

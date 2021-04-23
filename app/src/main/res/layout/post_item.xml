@@ -23,7 +23,7 @@
                 android:layout_margin="5dp"/>
 
             <TextView
-                android:id="@+id/username"
+                android:id="@+id/author_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -32,7 +32,8 @@
                 android:textAlignment="viewStart"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="RtlCompat" />
 
             <ImageView
                 android:id="@+id/more"

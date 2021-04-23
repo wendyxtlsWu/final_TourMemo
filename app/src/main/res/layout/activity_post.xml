@@ -44,100 +44,103 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="15dp"
-        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bar">
 
-        <EditText
-            android:id="@+id/spot_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Scenic spot name" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:backgroundTint="@color/colorAccent"
-            android:orientation="horizontal">
-
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bar">
 
             <EditText
-                android:id="@+id/zipcode"
-                android:layout_width="160dp"
+                android:id="@+id/spot_name"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:layout_weight="1"
                 android:ems="10"
-                android:hint="Zipcode"
-                android:inputType="textPersonName" />
+                android:hint="Scenic spot name" />
 
-            <Button
-                android:id="@+id/current_zipcode"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="get current"
-                android:textColorLink="#FFFFFF"
-                android:textSize="12sp" />
-        </LinearLayout>
+                android:backgroundTint="@color/colorAccent"
+                android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher"
-            android:id="@+id/image_added"/>
 
-        <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="Description..."
-            android:maxLines="10"
-            android:id="@+id/description"
-            app:socialFlags="hashtag|mention"
-            app:hashtagColor="@color/colorPrimary"/>
+                <EditText
+                    android:id="@+id/zipcode"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Zipcode"
+                    android:inputType="textPersonName" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <Button
+                    android:id="@+id/current_zipcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="get current"
+                    android:textColorLink="#FFFFFF"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="0.5"
-                android:text="@android:string/cancel"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/btn_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/image_added"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:layout_marginStart="5dp"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:text="submit"
-                android:textSize="14sp" />
+                android:scaleType="centerInside"
+                android:src="@mipmap/ic_launcher" />
+
+            <com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:hint="Description..."
+                android:maxLines="10"
+                app:hashtagColor="@color/colorPrimary"
+                app:socialFlags="hashtag|mention" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="0.5"
+                    android:text="@android:string/cancel"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:text="submit"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
         </LinearLayout>
+    </ScrollView>
 
 
-
-
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
