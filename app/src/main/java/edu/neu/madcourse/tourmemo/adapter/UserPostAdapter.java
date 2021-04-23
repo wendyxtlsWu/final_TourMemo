@@ -1,68 +1,102 @@
 package edu.neu.madcourse.tourmemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import edu.neu.madcourse.tourmemo.MainActivity;
 import edu.neu.madcourse.tourmemo.R;
+import edu.neu.madcourse.tourmemo.model.Post;
 
 public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHolder>{
 
     private Context mContext;
-    private List<String> mPosts;
-    private List<String> mPostCount;
+//    private List<String> mPosts;
+//    private List<String> mPostCount;
+    private List<Post> mUserPost;
+    private FirebaseUser firebaseUser;
 
-    public UserPostAdapter(Context mContext, List<String> mPosts, List<String> mPostCount) {
+    public UserPostAdapter(Context mContext, List<Post> mUserPost) {
         this.mContext = mContext;
-        this.mPosts = mPosts;
-        this.mPostCount = mPostCount;
+        this.mUserPost = mUserPost;
+
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.u_post_item , parent , false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.user_post_item , parent , false);
         return new UserPostAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        Post userPost = mUserPost.get(position);
 
-        holder.post.setText("# " + mPosts.get(position));
-        holder.numPosts.setText(mPostCount.get(position) + " posts");
+        holder.zipcode.setText(userPost.getZipcode());
+        holder.name.setText(userPost.getSpotName());
+        holder.description.setText(userPost.getDescription());
+        Glide.with(mContext).load(userPost.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.image);
+
+       holder.itemView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent intent = new Intent(mContext, MainActivity.class);
+               mContext.startActivity(intent);
+           }
+       });
+
+
+        //holder.btnFollow.setVisibility(View.VISIBLE);
+
+//        holder.post.setText("# " + mPosts.get(position));
+//        holder.numPosts.setText(mPostCount.get(position) + " posts");
 
     }
 
     @Override
     public int getItemCount() {
-        return mPosts.size();
+        return mUserPost.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public TextView post;
-        public TextView numPosts;
+        public TextView zipcode;
+        public TextView name;
+        public TextView description;
+        public ImageView image;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            post = itemView.findViewById(R.id.user_post);
-            numPosts = itemView.findViewById(R.id.num_posts);
+            zipcode = itemView.findViewById(R.id.txtZipcode);
+            name = itemView.findViewById(R.id.txtName);
+            description = itemView.findViewById(R.id.txtDes);
+            image = itemView.findViewById(R.id.img);
         }
     }
 
-    public void filter (List<String> filterPosts , List<String> filterPostsCount) {
-        this.mPosts = filterPosts;
-        this.mPostCount = filterPostsCount;
-
-        notifyDataSetChanged();
-    }
+//    public void filter (List<String> filterPosts , List<String> filterPostsCount) {
+//        this.mPosts = filterPosts;
+//        this.mPostCount = filterPostsCount;
+//
+//        notifyDataSetChanged();
+//    }
 
 }

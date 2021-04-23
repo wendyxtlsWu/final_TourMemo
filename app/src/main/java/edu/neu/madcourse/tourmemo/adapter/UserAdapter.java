@@ -25,6 +25,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.neu.madcourse.tourmemo.MainActivity;
 import edu.neu.madcourse.tourmemo.R;
+import edu.neu.madcourse.tourmemo.fragments.ProfileFragment;
 import edu.neu.madcourse.tourmemo.model.User;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
@@ -58,9 +59,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
         Glide.with(mContext).load(user.getImageurl()).placeholder(R.mipmap.ic_launcher).into(holder.imageProfile);
         holder.btnFollow.setVisibility(View.VISIBLE);
 
-        if (user.getId().equals(firebaseUser.getUid())){
-            holder.btnFollow.setVisibility(View.GONE);
-        }
+//        if (user.getId().equals(firebaseUser.getUid())){
+//            holder.btnFollow.setVisibility(View.GONE);
+//        }
 
         followUser(user.getId() , holder.btnFollow);
 
@@ -76,31 +77,31 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder>{
                             child(user.getId()).child("followers").child(firebaseUser.getUid()).setValue(true);
 
                     addNotification(user.getId());
-                    Toast.makeText(mContext, "you are following this user", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "You are following this user!", Toast.LENGTH_LONG).show();
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("Follow").
                             child((firebaseUser.getUid())).child("following").child(user.getId()).removeValue();
 
                     FirebaseDatabase.getInstance().getReference().child("Follow").
                             child(user.getId()).child("followers").child(firebaseUser.getUid()).removeValue();
-                    Toast.makeText(mContext, "you are not following this user", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "You are not following this user!", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isFragment) {
-//                    mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE).edit().putString("profileId", user.getId()).apply();
-//                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-//                } else {
-//                    Intent intent = new Intent(mContext, MainActivity.class);
-//                    intent.putExtra("publisherId", user.getId());
-//                    mContext.startActivity(intent);
-//                }
-//            }
-//        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFragment) {
+                    mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE).edit().putString("profileId", user.getId()).apply();
+                    ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                } else {
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    intent.putExtra("publisherId", user.getId());
+                    mContext.startActivity(intent);
+                }
+            }
+        });
 
     }
 

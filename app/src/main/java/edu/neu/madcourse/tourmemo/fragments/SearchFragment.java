@@ -6,14 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -23,6 +21,7 @@ import java.util.List;
 import edu.neu.madcourse.tourmemo.R;
 import edu.neu.madcourse.tourmemo.adapter.UserAdapter;
 import edu.neu.madcourse.tourmemo.adapter.UserPostAdapter;
+import edu.neu.madcourse.tourmemo.model.Post;
 import edu.neu.madcourse.tourmemo.model.User;
 
 
@@ -33,9 +32,12 @@ public class SearchFragment extends Fragment {
     private UserAdapter userAdapter;
 
     private RecyclerView recyclerViewPosts;
-    private List<String> mPosts;
-    private List<String> mPostsCount;
+    private List<Post> mUserPosts;
     private UserPostAdapter uPostAdapter;
+
+    private RecyclerView recyclerViewPosts2;
+    private List<Post> mUserPosts2;
+    private UserPostAdapter uPostAdapter2;
 
     private SocialAutoCompleteTextView search_bar;
 
@@ -52,67 +54,48 @@ public class SearchFragment extends Fragment {
         userAdapter = new UserAdapter(getContext() , mUsers , true);
         recyclerViewUser.setAdapter(userAdapter);
 
-
         recyclerViewPosts = view.findViewById(R.id.recycler_view_posts);
         recyclerViewPosts.setHasFixedSize(true);
         recyclerViewPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mPosts = new ArrayList<>();
-        mPostsCount = new ArrayList<>();
-        uPostAdapter = new UserPostAdapter(getContext() , mPosts ,  mPostsCount);
+        mUserPosts = new ArrayList<>();
+        uPostAdapter = new UserPostAdapter(getContext() , mUserPosts);
         recyclerViewPosts.setAdapter(uPostAdapter);
+
+        recyclerViewPosts2 = view.findViewById(R.id.recycler_view_posts2);
+        recyclerViewPosts2.setHasFixedSize(true);
+        recyclerViewPosts2.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mUserPosts2 = new ArrayList<>();
+        uPostAdapter2 = new UserPostAdapter(getContext() , mUserPosts2);
+        recyclerViewPosts2.setAdapter(uPostAdapter2);
 
 
         search_bar = view.findViewById(R.id.search_bar);
 
-        readUsers();
-        readPosts();
 
         search_bar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchPostByName(s.toString());
                 searchUser(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                searchPost(s.toString());
+                searchPostByZipCode(s.toString());
             }
         });
 
         return view;
     }
 
-
-    private void readUsers() {
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (TextUtils.isEmpty(search_bar.getText().toString())){
-                    mUsers.clear();
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                        User user = snapshot.getValue(User.class);
-                        mUsers.add(user);
-                    }
-
-                    userAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
 
     private void searchUser (String usrName) {
         Query query = FirebaseDatabase.getInstance().getReference().child("Users")
@@ -125,6 +108,7 @@ public class SearchFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     mUsers.add(user);
+
                 }
                 userAdapter.notifyDataSetChanged();
             }
@@ -136,19 +120,19 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private void readPosts() {
 
-        FirebaseDatabase.getInstance().getReference().child("HashTags").addValueEventListener(new ValueEventListener() {
+    private void searchPostByZipCode (String zipcode) {
+        Query query = FirebaseDatabase.getInstance().getReference().child("Posts")
+                .orderByChild("zipcode").startAt(zipcode).endAt(zipcode + "\uf8ff");
+
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mPosts.clear();
-                mPostsCount.clear();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    mPosts.add(snapshot.getKey());
-                    mPostsCount.add(snapshot.getChildrenCount() + "");
+                mUserPosts.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Post uerPost = snapshot.getValue(Post.class);
+                    mUserPosts.add(uerPost);
                 }
-
                 uPostAdapter.notifyDataSetChanged();
             }
 
@@ -157,20 +141,27 @@ public class SearchFragment extends Fragment {
 
             }
         });
-
     }
 
-    private void searchPost (String text) {
-        List<String> mSearchPosts = new ArrayList<>();
-        List<String> mSearchPostsCount = new ArrayList<>();
+    private void searchPostByName (String name) {
+        Query query = FirebaseDatabase.getInstance().getReference().child("Posts")
+                .orderByChild("spotName").startAt(name).endAt(name + "\uf8ff");
 
-        for (String s : mPosts) {
-            if (s.toLowerCase().contains(text.toLowerCase())){
-                mSearchPosts.add(s);
-                mSearchPostsCount.add(mPostsCount.get(mPosts.indexOf(s)));
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                mUserPosts2.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Post uerPost = snapshot.getValue(Post.class);
+                    mUserPosts2.add(uerPost);
+                }
+                uPostAdapter2.notifyDataSetChanged();
             }
-        }
 
-        uPostAdapter.filter(mSearchPosts , mSearchPostsCount);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
