@@ -72,7 +72,8 @@ public class PostActivity extends AppCompatActivity {
 
     private String POST_TAG = "PostActivity";
 
-    static Long points;
+    private Long points;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,20 +88,21 @@ public class PostActivity extends AppCompatActivity {
         spotName = findViewById(R.id.spot_name);
         zipcode = findViewById(R.id.zipcode);
 
-//        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                User user = dataSnapshot.getValue(User.class);
-//                points = user.getPoints();
-//                spotName.setText(String.valueOf(points));
-//                Log.v(POST_TAG, "current points: " + points);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                points = user.getPoints() + 5;
+                Log.v(POST_TAG, "current points: " + points);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +115,7 @@ public class PostActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                upload();
+                upload(points);
             }
         });
 
@@ -153,7 +155,11 @@ public class PostActivity extends AppCompatActivity {
     }
 
 
-    private void upload() {
+    private void upload(Long p) {
+        if (p == null) {
+            Toast.makeText(this, "Cannot read user data. Please try again!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
@@ -205,28 +211,10 @@ public class PostActivity extends AppCompatActivity {
                         }
                     }
 
-                    FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
-                            points = user.getPoints();
-//                            Log.v(POST_TAG, "current points: " + points);
 
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
-                    if (points == null) {
-                        points = 0L;
-                    }
                     HashMap<String, Object> userMap = new HashMap<>();
-                    points = points + 5L;
-                    userMap.put("points", points);
-//                    Log.v(POST_TAG, "new points: " + points);
+                    userMap.put("points", p);
+                    Log.v(POST_TAG, "new points: " + p);
                     FirebaseDatabase.getInstance().getReference().child("Users").child(currentUser.getUid()).updateChildren(userMap);
 
                     pd.dismiss();

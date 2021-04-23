@@ -23,14 +23,24 @@
                 android:layout_margin="5dp"/>
 
             <TextView
+                android:id="@+id/author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/username"
                 android:layout_gravity="center_vertical"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:textAlignment="viewStart"
                 android:textColor="@color/colorPrimaryDark"
-                android:layout_margin="5dp"/>
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/more"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_more" />
 
         </LinearLayout>
 
@@ -68,14 +78,6 @@
 
         </RelativeLayout>
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textStyle="bold"
-            android:id="@+id/author"
-            android:textColor="@color/colorPrimaryDark"/>
 
         <com.hendraanggrian.appcompat.widget.SocialTextView
             android:layout_width="wrap_content"

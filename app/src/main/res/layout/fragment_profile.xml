@@ -28,7 +28,7 @@
                     android:textSize="18sp"
                     android:maxLines="1"
                     android:textStyle="bold"
-                    android:id="@+id/username"
+                    android:id="@+id/author"
                     android:textColor="@color/colorPrimaryDark"/>
 
                 <ImageView
