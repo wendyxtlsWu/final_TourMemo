@@ -96,6 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
                 map.put("email", email);
                 map.put("username" , username);
                 map.put("id", mAuth.getCurrentUser().getUid());
+                map.put("points", 0);
                 map.put("bio", "");
                 map.put("imageurl", "default");
 

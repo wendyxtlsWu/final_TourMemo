@@ -5,6 +5,7 @@ public class User {
     private String name;
     private String email;
     private String username;
+    private Long points;
     private String bio;
     private String imageurl;
     private String id;
@@ -12,10 +13,11 @@ public class User {
     public User() {
     }
 
-    public User(String name, String email, String username, String bio, String imageurl, String id) {
+    public User(String name, String email, String username, Long points, String bio, String imageurl, String id) {
         this.name = name;
         this.email = email;
         this.username = username;
+        this.points = points;
         this.bio = bio;
         this.imageurl = imageurl;
         this.id = id;
@@ -43,6 +45,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Long getPoints() {
+        return points;
+    }
+
+    public void setPoints(Long points) {
+        this.points = points;
     }
 
     public String getBio() {
