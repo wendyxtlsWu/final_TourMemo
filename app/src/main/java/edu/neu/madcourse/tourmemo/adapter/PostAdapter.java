@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -33,6 +34,8 @@ import edu.neu.madcourse.tourmemo.model.Post;
 import edu.neu.madcourse.tourmemo.model.User;
 
 import com.squareup.picasso.Picasso;
+
+import static java.security.AccessController.getContext;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
@@ -88,10 +91,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
             dropDownMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    FirebaseDatabase.getInstance().getReference().child("HashTags").child(post.getSpotName().toLowerCase()).child(post.getPostId()).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("HashTags").child(post.getZipcode().toLowerCase()).child(post.getPostId()).removeValue();
-                    FirebaseDatabase.getInstance().getReference().child("Posts").child(post.getPostId()).removeValue();
-                    return true;
+                    if (firebaseUser.getUid() != post.getPublisher()) {
+                        Toast.makeText(mContext, "You cannot delete other's post!", Toast.LENGTH_SHORT).show();
+                        return true;
+                    } else {
+                        FirebaseDatabase.getInstance().getReference().child("HashTags").child(post.getSpotName().toLowerCase()).child(post.getPostId()).removeValue();
+                        FirebaseDatabase.getInstance().getReference().child("HashTags").child(post.getZipcode().toLowerCase()).child(post.getPostId()).removeValue();
+                        FirebaseDatabase.getInstance().getReference().child("Posts").child(post.getPostId()).removeValue();
+                        return true;
+                    }
                 }
             });
             dropDownMenu.show();
