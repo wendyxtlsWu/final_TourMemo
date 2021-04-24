@@ -13,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class OptionsActivity extends AppCompatActivity {
     TextView settings;
-    TextView saved;
     Button logOut_button;
 
     @Override
@@ -22,7 +21,6 @@ public class OptionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_options);
 
         settings = findViewById(R.id.settings);
-        saved = findViewById(R.id.saved);
         logOut_button = findViewById(R.id.logout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

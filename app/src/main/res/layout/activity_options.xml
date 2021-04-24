@@ -25,18 +25,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="100dp" />
 
-    <TextView
-        android:id="@+id/saved"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_marginStart="16dp"
-        android:text="@string/saved"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="155dp" />
-
     <Button
         android:id="@+id/logout"
         android:layout_width="match_parent"

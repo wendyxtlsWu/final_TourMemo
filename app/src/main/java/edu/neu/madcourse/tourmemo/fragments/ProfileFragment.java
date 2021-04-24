@@ -1,5 +1,6 @@
 package edu.neu.madcourse.tourmemo.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,6 +30,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProfileFragment extends Fragment {
 
@@ -87,9 +92,8 @@ public class ProfileFragment extends Fragment {
 
 
         getUserInfo();
-
-        getFollowerAndFollowingCount();
-
+        getFollowersAndFollowingCount();
+        getCityCount();
         getPostCount();
 
         // navigate to edit profile
@@ -110,14 +114,19 @@ public class ProfileFragment extends Fragment {
     }
 
 
+    // get basic information of the user
     private void getUserInfo() {
         FirebaseDatabase.getInstance().getReference().child("Users").child(profileId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                // ToDo: check the format
-                imageProfile.setImageURI(Uri.parse(user.getImageurl()));
+                assert user != null;
+                Picasso.get().load(user.getImageurl()).into(imageProfile);
+                display_email.setText(user.getEmail());
+                display_username.setText(user.getUsername());
+                if (user.getPoints() == null) display_points.setText(String.valueOf(0));
+                else display_points.setText(String.valueOf(user.getPoints()));
 
                 bio.setText(user.getBio());
             }
@@ -130,11 +139,12 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    private void getFollowerAndFollowingCount() {
+    // get the number of followers and followings
+    private void getFollowersAndFollowingCount() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Follow").child(profileId);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Collections").child(profileId);
-
-        ref.child("likes").addValueEventListener(new ValueEventListener() {
+        ref.child("followers").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 followers.setText("" + dataSnapshot.getChildrenCount());
@@ -146,7 +156,8 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        ref.child("shares").addValueEventListener(new ValueEventListener() {
+        ref.child("following").addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 following.setText("" + dataSnapshot.getChildrenCount());
@@ -160,6 +171,29 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    // obtain the number of different zip codes
+    private void getCityCount() {
+        FirebaseDatabase.getInstance().getReference().child("Posts").addValueEventListener(new ValueEventListener() {
+            final Set<String> zipCodes = new HashSet<>();
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Post post = snapshot.getValue(Post.class);
+                    assert post != null;
+                    if (post.getPublisher().equals(profileId))
+                        zipCodes.add(post.getZipcode());
+                }
+                display_cities.setText(String.valueOf(zipCodes.size()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    // obtain the number of posts
     private void getPostCount() {
         FirebaseDatabase.getInstance().getReference().child("Posts").addValueEventListener(new ValueEventListener() {
             @Override
@@ -168,6 +202,7 @@ public class ProfileFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Post post = snapshot.getValue(Post.class);
 
+                    assert post != null;
                     if (post.getPublisher().equals(profileId)) count++;
                 }
                 posts.setText(String.valueOf(count));
