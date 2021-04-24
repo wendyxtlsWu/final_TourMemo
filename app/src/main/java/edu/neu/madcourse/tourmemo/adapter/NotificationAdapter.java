@@ -1,6 +1,7 @@
 package edu.neu.madcourse.tourmemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import edu.neu.madcourse.tourmemo.PostDetailActivity;
 import edu.neu.madcourse.tourmemo.R;
-import edu.neu.madcourse.tourmemo.fragments.PostDetailFragment;
 import edu.neu.madcourse.tourmemo.fragments.ProfileFragment;
 import edu.neu.madcourse.tourmemo.model.Notification;
 import edu.neu.madcourse.tourmemo.model.Post;
@@ -62,11 +64,22 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             @Override
             public void onClick(View v) {
                 if (notification.isIsPost()) {
-                    mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE)
-                            .edit().putString("postId", notification.getPostId()).apply();
+                    FirebaseDatabase.getInstance().getReference().child("Posts").child(notification.getPostId()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Post post = snapshot.getValue(Post.class);
+                            Intent intent = new Intent(mContext, PostDetailActivity.class);
+                            intent.putExtra("postId", notification.getPostId());
+                            intent.putExtra("authorId", post.getPublisher());
+                            mContext.startActivity(intent);
+                        }
 
-                    ((FragmentActivity)mContext).getSupportFragmentManager()
-                            .beginTransaction().replace(R.id.fragment_container, new PostDetailFragment()).commit();
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                 } else {
                     mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
                             .edit().putString("profileId", notification.getUserId()).apply();

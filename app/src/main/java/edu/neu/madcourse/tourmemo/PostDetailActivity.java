@@ -64,26 +64,6 @@ public class PostDetailActivity extends AppCompatActivity {
         postId = intent.getStringExtra("postId");
         authorId = intent.getStringExtra("authorId");
 
-        FirebaseDatabase.getInstance().getReference().child("Users").child(authorId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User author = snapshot.getValue(User.class);
-
-                if (author.getImageurl().equals("default")) {
-                    imageProfile.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    Picasso.get().load(author.getImageurl()).into(imageProfile);
-                }
-                authorName.setText(author.getName());
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
         FirebaseDatabase.getInstance().getReference().child("Posts").child(postId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -96,6 +76,26 @@ public class PostDetailActivity extends AppCompatActivity {
                 } else {
                     Picasso.get().load(post.getImageUrl()).into(postImage);
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(authorId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User author = snapshot.getValue(User.class);
+
+                if (author.getImageurl().equals("default")) {
+                    imageProfile.setImageResource(R.mipmap.ic_launcher);
+                } else {
+                    Picasso.get().load(author.getImageurl()).into(imageProfile);
+                }
+                authorName.setText(author.getName());
+
             }
 
             @Override
