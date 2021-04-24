@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "152180290084",
-    "firebase_url": "https://tourmemo-c6496-default-rtdb.firebaseio.com",
-    "project_id": "tourmemo-c6496",
-    "storage_bucket": "tourmemo-c6496.appspot.com"
+    "project_number": "130088909013",
+    "firebase_url": "https://ttourmemo-default-rtdb.firebaseio.com",
+    "project_id": "ttourmemo",
+    "storage_bucket": "ttourmemo.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:152180290084:android:9cf7f018deae7578a45eb1",
+        "mobilesdk_app_id": "1:130088909013:android:af0e6eb4871d1018254a5c",
         "android_client_info": {
           "package_name": "edu.neu.madcourse.tourmemo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "152180290084-3buarb20cch5td341m78nn2pp0jq6a27.apps.googleusercontent.com",
+          "client_id": "130088909013-8d4ucht8ko18ullb9k7c03noo2tifon4.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDFQxuqDcKf239t9YDYBnwqzn8HqQxm1IE"
+          "current_key": "AIzaSyBpKZFc4hx3bxZ9IYKEVqhMWHVFctpjaPQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "152180290084-3buarb20cch5td341m78nn2pp0jq6a27.apps.googleusercontent.com",
+              "client_id": "130088909013-8d4ucht8ko18ullb9k7c03noo2tifon4.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
