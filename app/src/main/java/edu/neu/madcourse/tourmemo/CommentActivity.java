@@ -181,6 +181,6 @@ public class CommentActivity extends AppCompatActivity {
         map.put("postid", postId);
         map.put("isPost", true);
 
-        FirebaseDatabase.getInstance().getReference().child("Notifications").child(fUser.getUid()).push().setValue(map);
+        FirebaseDatabase.getInstance().getReference().child("Notifications").child(authorId).push().setValue(map);
     }
 }
