@@ -50,7 +50,6 @@ public class ProfileFragment extends Fragment {
     private TextView display_username;
     private TextView display_points;
     private TextView display_cities;
-    private TextView display_posts;
 
     private FirebaseUser fireBaseUser;
 
@@ -88,8 +87,6 @@ public class ProfileFragment extends Fragment {
         display_username = view.findViewById(R.id.display_username);
         display_points = view.findViewById(R.id.display_points);
         display_cities = view.findViewById(R.id.display_cities);
-        display_posts = view.findViewById(R.id.display_posts);
-
 
         getUserInfo();
         getFollowersAndFollowingCount();

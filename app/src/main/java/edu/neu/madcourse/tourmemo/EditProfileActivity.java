@@ -72,6 +72,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
+                assert user != null;
                 input_email.setText(user.getEmail());
                 input_username.setText(user.getUsername());
                 input_bio.setText(user.getBio());
@@ -93,20 +94,10 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
         // change photo button
-        changePhoto_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CropImage.activity().setCropShape(CropImageView.CropShape.OVAL).start(EditProfileActivity.this);
-            }
-        });
+        changePhoto_button.setOnClickListener(v -> CropImage.activity().setCropShape(CropImageView.CropShape.OVAL).start(EditProfileActivity.this));
 
         // profile image click
-        imageProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CropImage.activity().setCropShape(CropImageView.CropShape.OVAL).start(EditProfileActivity.this);
-            }
-        });
+        imageProfile.setOnClickListener(v -> CropImage.activity().setCropShape(CropImageView.CropShape.OVAL).start(EditProfileActivity.this));
 
         // save button
         save_button.setOnClickListener(new View.OnClickListener() {
@@ -135,26 +126,20 @@ public class EditProfileActivity extends AppCompatActivity {
             final StorageReference fileRef = storageRef.child(System.currentTimeMillis() + ".jpeg");
 
             uploadTask = fileRef.putFile(mImageUri);
-            uploadTask.continueWithTask(new Continuation() {
-                @Override
-                public Object then(@NonNull Task task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-                    return  fileRef.getDownloadUrl();
+            uploadTask.continueWithTask((Continuation) task -> {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
                 }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String url = downloadUri.toString();
+                return fileRef.getDownloadUrl();
+            }).addOnCompleteListener((OnCompleteListener<Uri>) task -> {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    String url = downloadUri.toString();
 
-                        FirebaseDatabase.getInstance().getReference().child("Users").child(fUser.getUid()).child("imageUrl").setValue(url);
-                        pd.dismiss();
-                    } else {
-                        Toast.makeText(EditProfileActivity.this, "Upload failed!", Toast.LENGTH_SHORT).show();
-                    }
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(fUser.getUid()).child("imageUrl").setValue(url);
+                    pd.dismiss();
+                } else {
+                    Toast.makeText(EditProfileActivity.this, "Upload failed!", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -168,8 +153,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            assert result != null;
             mImageUri = result.getUri();
-
             uploadImage();
         } else {
             Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show();

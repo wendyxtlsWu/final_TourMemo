@@ -50,12 +50,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         final Notification notification = mNotifications.get(position);
 
-        getUser(holder.imageProfile, holder.username, notification.getUserId());
+        getUser(holder.imageProfile, holder.username, notification.getUserid());
         holder.comment.setText(notification.getText());
 
         if (notification.isIsPost()) {
             holder.postImage.setVisibility(View.VISIBLE);
-            getPostImage(holder.postImage, notification.getPostId());
+            getPostImage(holder.postImage, notification.getPostid());
         } else {
             holder.postImage.setVisibility(View.GONE);
         }
@@ -64,12 +64,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             @Override
             public void onClick(View v) {
                 if (notification.isIsPost()) {
-                    FirebaseDatabase.getInstance().getReference().child("Posts").child(notification.getPostId()).addValueEventListener(new ValueEventListener() {
+                    FirebaseDatabase.getInstance().getReference().child("Posts").child(notification.getPostid()).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Post post = snapshot.getValue(Post.class);
                             Intent intent = new Intent(mContext, PostDetailActivity.class);
-                            intent.putExtra("postId", notification.getPostId());
+                            intent.putExtra("postId", notification.getPostid());
                             intent.putExtra("authorId", post.getPublisher());
                             mContext.startActivity(intent);
                         }
@@ -82,14 +82,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
                 } else {
                     mContext.getSharedPreferences("PROFILE", Context.MODE_PRIVATE)
-                            .edit().putString("profileId", notification.getUserId()).apply();
+                            .edit().putString("profileId", notification.getUserid()).apply();
 
                     ((FragmentActivity)mContext).getSupportFragmentManager()
                             .beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
                 }
             }
         });
-
     }
 
     @Override
