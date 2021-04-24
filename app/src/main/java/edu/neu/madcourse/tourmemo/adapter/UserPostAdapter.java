@@ -63,8 +63,11 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
 
                     if(cUser.getId().equals(userID)) {
                         usrName = cUser.getUsername();
+
+
                     }
                 }
+                holder.userNamefill.setText(usrName);
             }
 
             @Override
@@ -73,9 +76,9 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
             }
         });
 
-        holder.username.setText("user name: "+ usrName);
+
         holder.zipcode.setText("zip code: "+ userPost.getZipcode());
-        holder.name.setText("spot name: "+ userPost.getSpotName());
+        holder.spotNamefill.setText(userPost.getSpotName());
         Glide.with(mContext).load(userPost.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(holder.image);
 
         isLiked(userPost.getPostId(), holder.likeButton);
@@ -139,6 +142,9 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
         public TextView zipcode;
         public TextView username;
         public TextView name;
+        public TextView userNamefill;
+        public TextView spotNamefill;
+
 
         public ImageView image;
         public ImageView likeButton;
@@ -151,6 +157,8 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
             name = itemView.findViewById(R.id.txtName);
             image = itemView.findViewById(R.id.img);
             likeButton = itemView.findViewById(R.id.like);
+            userNamefill = itemView.findViewById(R.id.userNamefill);
+            spotNamefill = itemView.findViewById(R.id.spotNamefill);
         }
     }
 

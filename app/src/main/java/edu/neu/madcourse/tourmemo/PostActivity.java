@@ -228,7 +228,6 @@ public class PostActivity extends AppCompatActivity {
 
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
                     String postId = ref.push().getKey();
-
                     HashMap<String , Object> map = new HashMap<>();
                     map.put("postId" , postId);
                     map.put("spotName", spotName.getText().toString());
