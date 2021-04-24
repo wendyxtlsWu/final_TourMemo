@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import edu.neu.madcourse.tourmemo.EditProfileActivity;
 import edu.neu.madcourse.tourmemo.OptionsActivity;
 import edu.neu.madcourse.tourmemo.R;
 import edu.neu.madcourse.tourmemo.model.Post;
@@ -91,8 +92,13 @@ public class ProfileFragment extends Fragment {
 
         getPostCount();
 
+        // navigate to edit profile
+        editProfile_button.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), EditProfileActivity.class);
+            startActivity(intent);
+        });
 
-
+        // navigate to options
         options_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
