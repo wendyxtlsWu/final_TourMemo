@@ -65,7 +65,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
         FirebaseDatabase.getInstance().getReference().child("Users").child(post.getPublisher()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
+                User user;
+                do {
+                    user = dataSnapshot.getValue(User.class);
+                    if (!user.equals(null)) {
+                        break;
+                    }
+                } while (user.equals(null));
 
                 if (user.getImageurl().equals("default")) {
                     holder.imageProfile.setImageResource(R.mipmap.ic_launcher);

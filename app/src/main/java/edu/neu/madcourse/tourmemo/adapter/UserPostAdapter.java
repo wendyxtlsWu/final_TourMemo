@@ -33,7 +33,7 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
     private Context mContext;
     private List<Post> mUserPost;
     private FirebaseUser firebaseUser;
-    String usrName = "";
+    private String usrName;
 
     public UserPostAdapter(Context mContext, List<Post> mUserPost) {
         this.mContext = mContext;
@@ -64,8 +64,6 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
 
                     if(cUser.getId().equals(userID)) {
                         usrName = cUser.getUsername();
-
-
                     }
                 }
                 holder.userNamefill.setText(usrName);

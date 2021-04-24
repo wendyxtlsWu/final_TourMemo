@@ -68,7 +68,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
 
-                holder.username.setText(user.getUsername());
+                holder.username.setText(user.getName());
                 if (user.getImageurl().equals("default")) {
                     holder.imageProfile.setImageResource(R.mipmap.ic_launcher);
                 } else {

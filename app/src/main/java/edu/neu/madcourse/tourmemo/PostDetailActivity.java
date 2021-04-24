@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import edu.neu.madcourse.tourmemo.adapter.CommentAdapter;
 import edu.neu.madcourse.tourmemo.model.Comment;
@@ -67,12 +68,13 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User author = snapshot.getValue(User.class);
-                authorName.setText(author.getName());
+
                 if (author.getImageurl().equals("default")) {
                     imageProfile.setImageResource(R.mipmap.ic_launcher);
                 } else {
                     Picasso.get().load(author.getImageurl()).into(imageProfile);
                 }
+                authorName.setText(author.getName());
 
             }
 
@@ -85,7 +87,9 @@ public class PostDetailActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("Posts").child(postId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 Post post = snapshot.getValue(Post.class);
+
                 description.setText(post.getDescription());
                 if (post.getImageUrl().equals("default")) {
                     postImage.setImageResource(R.mipmap.ic_launcher);
