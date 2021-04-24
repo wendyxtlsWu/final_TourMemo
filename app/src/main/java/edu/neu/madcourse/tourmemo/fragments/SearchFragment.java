@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment {
         userAdapter = new UserAdapter(getContext() , mUsers , true);
         recyclerViewUser.setAdapter(userAdapter);
 
-        recyclerViewPosts = view.findViewById(R.id.recycler_view_posts);
+        recyclerViewPosts = view.findViewById(R.id.recycler_view_comments);
         recyclerViewPosts.setHasFixedSize(true);
         recyclerViewPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 

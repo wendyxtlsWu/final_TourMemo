@@ -1,6 +1,7 @@
 package edu.neu.madcourse.tourmemo.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.neu.madcourse.tourmemo.PostDetailActivity;
 import edu.neu.madcourse.tourmemo.R;
-import edu.neu.madcourse.tourmemo.fragments.PostDetailFragment;
 import edu.neu.madcourse.tourmemo.model.Post;
 import edu.neu.madcourse.tourmemo.model.User;
 
@@ -102,10 +103,10 @@ public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
-                mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit().putString("postId", userPost.getPostId()).apply();
-
-                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new PostDetailFragment()).commit();
+                Intent intent = new Intent(mContext, PostDetailActivity.class);
+                intent.putExtra("postId", userPost.getPostId());
+                intent.putExtra("authorId", userPost.getPublisher());
+                mContext.startActivity(intent);
             }
         });
 

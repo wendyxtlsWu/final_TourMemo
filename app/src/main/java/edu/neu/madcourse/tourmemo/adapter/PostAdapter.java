@@ -27,15 +27,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.neu.madcourse.tourmemo.CommentActivity;
+import edu.neu.madcourse.tourmemo.PostDetailActivity;
 import edu.neu.madcourse.tourmemo.R;
-import edu.neu.madcourse.tourmemo.fragments.PostDetailFragment;
 import edu.neu.madcourse.tourmemo.fragments.ProfileFragment;
 import edu.neu.madcourse.tourmemo.model.Post;
 import edu.neu.madcourse.tourmemo.model.User;
 
 import com.squareup.picasso.Picasso;
-
-import static java.security.AccessController.getContext;
 
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
@@ -169,10 +167,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Viewholder> {
         holder.postImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit().putString("postid", post.getPostId()).apply();
-
-                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new PostDetailFragment()).commit();
+                Intent intent = new Intent(mContext, PostDetailActivity.class);
+                intent.putExtra("postId", post.getPostId());
+                intent.putExtra("authorId", post.getPublisher());
+                mContext.startActivity(intent);
             }
         });
 

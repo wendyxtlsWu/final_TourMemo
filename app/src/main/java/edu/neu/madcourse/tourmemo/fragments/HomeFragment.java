@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.madcourse.tourmemo.MainActivity;
 import edu.neu.madcourse.tourmemo.PostActivity;
 import edu.neu.madcourse.tourmemo.R;
 import edu.neu.madcourse.tourmemo.adapter.PostAdapter;
@@ -46,7 +44,7 @@ public class HomeFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
         addPost = (ImageButton) view.findViewById(R.id.add_new_post);
-        postsRecycleView = view.findViewById(R.id.recycler_view_posts);
+        postsRecycleView = view.findViewById(R.id.recycler_view_comments);
         postsRecycleView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setStackFromEnd(true);
