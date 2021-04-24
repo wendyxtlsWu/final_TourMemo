@@ -87,6 +87,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:textColor="@color/colorAccent"
+            android:maxLines="5"
             android:id="@+id/description"/>
 
         <TextView
