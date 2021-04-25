@@ -60,14 +60,14 @@ public class CollectionsFragment extends Fragment {
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         recyclerViewPosts = view.findViewById(R.id.recycler_view_pictures);
-        recyclerViewPosts.setHasFixedSize(true);
+        //recyclerViewPosts.setHasFixedSize(true);
         recyclerViewPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
         myPhotoList = new ArrayList<>();
         photoAdapterPosts = new PhotoAdapter(getContext(), myPhotoList);
         recyclerViewPosts.setAdapter(photoAdapterPosts);
 
         recyclerViewLikes = view.findViewById(R.id.recycler_view_liked);
-        recyclerViewLikes.setHasFixedSize(true);
+        //recyclerViewLikes.setHasFixedSize(true);
         recyclerViewLikes.setLayoutManager(new GridLayoutManager(getContext(), 3));
         myLikePosts = new ArrayList<>();
         postAdapterLikes = new PhotoAdapter(getContext(), myLikePosts);

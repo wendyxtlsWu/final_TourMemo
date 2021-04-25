@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
 
         addPost = (ImageButton) view.findViewById(R.id.add_new_post);
         postsRecycleView = view.findViewById(R.id.recycler_view_comments);
-        postsRecycleView.setHasFixedSize(true);
+        //postsRecycleView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);

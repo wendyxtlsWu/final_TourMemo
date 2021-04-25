@@ -105,7 +105,7 @@ public class PostDetailActivity extends AppCompatActivity {
         });
 
         recyclerView = findViewById(R.id.recycler_view_comments);
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         commentList = new ArrayList<>();

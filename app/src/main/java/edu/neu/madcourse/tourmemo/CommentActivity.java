@@ -70,7 +70,7 @@ public class CommentActivity extends AppCompatActivity {
         authorId = intent.getStringExtra("authorId");
 
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         commentList = new ArrayList<>();

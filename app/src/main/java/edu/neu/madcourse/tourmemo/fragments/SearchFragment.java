@@ -47,7 +47,7 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         recyclerViewUser = view.findViewById(R.id.recycler_view_users);
-        recyclerViewUser.setHasFixedSize(true);
+        //recyclerViewUser.setHasFixedSize(true);
         recyclerViewUser.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUsers = new ArrayList<>();
@@ -55,7 +55,7 @@ public class SearchFragment extends Fragment {
         recyclerViewUser.setAdapter(userAdapter);
 
         recyclerViewPosts = view.findViewById(R.id.recycler_view_comments);
-        recyclerViewPosts.setHasFixedSize(true);
+        //recyclerViewPosts.setHasFixedSize(true);
         recyclerViewPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUserPosts = new ArrayList<>();
@@ -63,7 +63,7 @@ public class SearchFragment extends Fragment {
         recyclerViewPosts.setAdapter(uPostAdapter);
 
         recyclerViewPosts2 = view.findViewById(R.id.recycler_view_posts2);
-        recyclerViewPosts2.setHasFixedSize(true);
+        //recyclerViewPosts2.setHasFixedSize(true);
         recyclerViewPosts2.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mUserPosts2 = new ArrayList<>();
